@@ -35,9 +35,12 @@ public float gravityForce;
     {
         direction = plane.transform.position - reference.transform.position;
         foreach (Rigidbody rb in rbs)
-        {
             rb.AddForce(direction.normalized * gravityForce);
-        }
     }
 
+    public void AllowGravity()
+    {
+        foreach (Rigidbody rb in rbs)
+            rb.isKinematic = false;
+    }
 }
