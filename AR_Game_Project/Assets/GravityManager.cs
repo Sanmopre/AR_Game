@@ -7,17 +7,22 @@ public class GravityManager : MonoBehaviour
 {
 
 private GameObject[] boxes;
-private Rigidbody2D[] rbs;
+private Rigidbody[] rbs;
+public GameObject plane;
+public GameObject reference;
+
+private Vector3 direction;
+public float gravityForce;
 
     void Start()
     {
         boxes = GameObject.FindGameObjectsWithTag("boxes");
-        rbs = new Rigidbody2D[boxes.Length];
+        rbs = new Rigidbody[boxes.Length];
 
         for (int i = 0; i < boxes.Length; ++i)
         {
             GameObject door = boxes[i];
-            rbs[i] = door.GetComponent<Rigidbody2D>();
+            rbs[i] = door.GetComponent<Rigidbody>();
         }
     }
 
@@ -28,10 +33,10 @@ private Rigidbody2D[] rbs;
 
     void ApplyGravity()
     {
-        foreach (Rigidbody2D rb in rbs)
+        direction = plane.transform.position - reference.transform.position;
+        foreach (Rigidbody rb in rbs)
         {
-            //Add force perpendicular to the plane
-            //rb.AddForce();
+            rb.AddForce(direction.normalized * gravityForce);
         }
     }
 
