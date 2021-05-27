@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class Player : MonoBehaviour
     private int ammo = 0;
 
     private bool playing = false;
+    private bool win = false;
+    private bool losing = false;
+
+    private bool toShoot = false;
 
     void Start()
     {
@@ -21,19 +26,28 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (playing)
-            if (ammo <= 0)
+        if (!playing)
+            return;
+
+        if (ammo <= 0)
+        {
+            if (!losing && !win)
             {
-                // Lose Screen
-                Debug.Log("LOSE");
+                losing = true;
+                StartCoroutine(GoToLoseScene());
             }
-            else if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Shoot();
-            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Space) || toShoot)
+            Shoot();
+        toShoot = false;
     }
 
-    void Shoot()
+    public void ToShoot()
+    {
+        toShoot = true;
+    }
+
+    private void Shoot()
     {
         --ammo;
 
@@ -45,11 +59,10 @@ public class Player : MonoBehaviour
     public void AddPoint()
     { 
         ++points;
-        Debug.Log("ADDED POINT");
-        if (points == maxPoints)
+        if (points == maxPoints && !win)
         {
-            // Win Screen
-            Debug.Log("WIN");
+            win = true;
+            StartCoroutine(GoToWinScene());
         }
     }
 
@@ -69,5 +82,18 @@ public class Player : MonoBehaviour
         ammo = 0;
 
         playing = false;
+    }
+
+    IEnumerator GoToWinScene()
+    {
+        yield return new WaitForSeconds(1.0f);
+        SceneManager.LoadScene("WinScene");
+    }
+
+    IEnumerator GoToLoseScene()
+    {
+        yield return new WaitForSeconds(4.0f);
+        if (!win)
+            SceneManager.LoadScene("LoseScene");
     }
 }
