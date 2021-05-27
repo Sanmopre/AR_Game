@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class GravityManager : MonoBehaviour
+public class GeneralManager : MonoBehaviour
 {
-
-private GameObject[] boxes;
-private Rigidbody[] rbs;
-public GameObject plane;
-public GameObject reference;
-
-private Vector3 direction;
-public float gravityForce;
+    private GameObject[] boxes;
+    private Rigidbody[] rbs;
+    private GameObject plane;
+    private GameObject reference;
+    
+    private Vector3 direction;
+    public float gravityForce;
 
     void Start()
     {
@@ -35,12 +34,20 @@ public float gravityForce;
     {
         direction = plane.transform.position - reference.transform.position;
         foreach (Rigidbody rb in rbs)
-            rb.AddForce(direction.normalized * gravityForce);
+            rb.AddForce(direction.normalized * gravityForce * rb.mass);
     }
 
-    public void AllowGravity()
+    public void LevelSpawned()
     {
+        plane = GameObject.Find("Ground");
+        reference = GameObject.Find("GravityReference");
+
         foreach (Rigidbody rb in rbs)
             rb.isKinematic = false;
+    }
+    public void LevelDespawned()
+    {
+        foreach (Rigidbody rb in rbs)
+            rb.isKinematic = true;
     }
 }
