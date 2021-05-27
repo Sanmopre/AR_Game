@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
     public void ToShoot()
     {
         toShoot = true;
+        Debug.Log("BUTTON CLICKED");
     }
 
     private void Shoot()
