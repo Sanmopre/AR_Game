@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -19,15 +20,19 @@ public class Player : MonoBehaviour
 
     private bool toShoot = false;
 
+    private Text pointsText;
+
     void Start()
     {
-        
+        pointsText = GameObject.Find("PointsText").GetComponent<Text>();
     }
 
     void Update()
     {
         if (!playing)
             return;
+            
+        DrawPoints();
 
         if (ammo <= 0)
         {
@@ -82,6 +87,11 @@ public class Player : MonoBehaviour
         ammo = 0;
 
         playing = false;
+    }
+
+    public void DrawPoints()
+    {
+        pointsText.text = "Points: " + points.ToString() + " / " + maxPoints.ToString();
     }
 
     IEnumerator GoToWinScene()
