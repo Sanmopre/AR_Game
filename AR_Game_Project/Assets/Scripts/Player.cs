@@ -8,9 +8,11 @@ public class Player : MonoBehaviour
     public GameObject projectile;
     public float force;
 
-    public int maxPoints;
-    private int points;
-    private int ammo;
+    private int maxPoints = 0;
+    private int points = 0;
+    private int ammo = 0;
+
+    private bool playing = false;
 
     void Start()
     {
@@ -19,15 +21,16 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (ammo <= 0)
-        {
-            // Lose Screen
-            Debug.Log("LOSE");
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Shoot();
-        }
+        if (playing)
+            if (ammo <= 0)
+            {
+                // Lose Screen
+                Debug.Log("LOSE");
+            }
+            else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Shoot();
+            }
     }
 
     void Shoot()
@@ -48,5 +51,23 @@ public class Player : MonoBehaviour
             // Win Screen
             Debug.Log("WIN");
         }
+    }
+
+    public void SetUp(int ammo, int maxPoints)
+    {
+        points = 0;
+        this.maxPoints = maxPoints;
+        this.ammo = ammo;
+
+        playing = true;
+    }
+
+    public void CleanUp()
+    {
+        points = 0;
+        maxPoints = 0;
+        ammo = 0;
+
+        playing = false;
     }
 }

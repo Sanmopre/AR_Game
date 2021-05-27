@@ -13,6 +13,9 @@ public class GeneralManager : MonoBehaviour
     private Vector3 direction;
     public float gravityForce;
 
+    private bool hasLevel = false;
+    private Player player;
+
     void Start()
     {
         boxes = GameObject.FindGameObjectsWithTag("boxes");
@@ -23,11 +26,8 @@ public class GeneralManager : MonoBehaviour
             GameObject door = boxes[i];
             rbs[i] = door.GetComponent<Rigidbody>();
         }
-    }
 
-    void Update()
-    {
-        ApplyGravity();
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void ApplyGravity()
@@ -37,17 +37,31 @@ public class GeneralManager : MonoBehaviour
             rb.AddForce(direction.normalized * gravityForce * rb.mass);
     }
 
-    public void LevelSpawned()
+    void Update()
+    {
+        if (hasLevel)
+            ApplyGravity();
+    }
+
+    public void LevelSpawned(int maxAmmo)
     {
         plane = GameObject.Find("Ground");
         reference = GameObject.Find("GravityReference");
 
         foreach (Rigidbody rb in rbs)
             rb.isKinematic = false;
+
+        player.SetUp(maxAmmo, 3);
+
+        hasLevel = true;
     }
     public void LevelDespawned()
     {
         foreach (Rigidbody rb in rbs)
             rb.isKinematic = true;
+
+        player.CleanUp();
+
+        hasLevel = false;
     }
 }

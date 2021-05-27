@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    public Player player;
+    private Player player;
 
     private bool used = false;
 
     void Start()
     {
-        
+        player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     void Update()
