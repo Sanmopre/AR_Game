@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class GeneralManager : MonoBehaviour
 {
@@ -16,6 +16,10 @@ public class GeneralManager : MonoBehaviour
     private bool hasLevel = false;
     private Player player;
 
+    private string noLevelText = "Scan a card to load a level";
+    private GameObject scope;
+    private GameObject shootButton;
+
     void Start()
     {
         boxes = GameObject.FindGameObjectsWithTag("boxes");
@@ -28,6 +32,12 @@ public class GeneralManager : MonoBehaviour
         }
 
         player = GameObject.Find("Player").GetComponent<Player>();
+
+        GameObject.Find("PointsText").GetComponent<Text>().text = noLevelText;
+        scope = GameObject.Find("Scope");
+        shootButton = GameObject.Find("ShootButton");
+        scope.SetActive(false);
+        shootButton.SetActive(false);
     }
 
     void ApplyGravity()
@@ -53,6 +63,9 @@ public class GeneralManager : MonoBehaviour
 
         player.SetUp(maxAmmo, 3);
 
+        scope.SetActive(true);
+        shootButton.SetActive(true);
+
         hasLevel = true;
     }
     public void LevelDespawned()
@@ -61,6 +74,11 @@ public class GeneralManager : MonoBehaviour
             rb.isKinematic = true;
 
         player.CleanUp();
+
+        scope.SetActive(false);
+        shootButton.SetActive(false);
+
+        GameObject.Find("PointsText").GetComponent<Text>().text = noLevelText;
 
         hasLevel = false;
     }
